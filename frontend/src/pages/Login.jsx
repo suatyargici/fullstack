@@ -21,7 +21,7 @@ const Login = () => {
                 <label htmlFor="email">Email</label>
                 <input
                   required
-                  email
+                  email="true"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"

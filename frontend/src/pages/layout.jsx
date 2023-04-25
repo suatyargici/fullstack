@@ -1,7 +1,18 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Layout = () => {
+  const navigate = useNavigate();
+  const checkLogin = () => {
+    let token = localStorage.getItem("token");
+    if (token == null) {
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  }, []);
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -34,4 +45,3 @@ const Layout = () => {
 };
 
 export default Layout;
-
