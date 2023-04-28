@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 const uri =
-  "mongodb+srv://yargicisuat:Zgxgx3XkpHZSYGzb@sosyalmedya.hkzebvk.mongodb.net/test";
+  "mongodb+srv://yargicisuat:Zgxgx3XkpHZSYGzb@sosyalmedya.hkzebvk.mongodb.net/socail-app";
 
 mongoose
   .connect(uri, {
@@ -44,6 +44,7 @@ const options = {
   expiresIn: "1h",
 };
 
+  // Register
 app.post("/api/register", upload.single("avatar"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -70,5 +71,15 @@ app.post("/api/register", upload.single("avatar"), async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
+  // Login
+  app.post("/api/login",async(req,res)=>{
+    const user = await user.findOne({
+      email:req.body.email,
+    })
+
+  })
+
 
 app.listen(5000, () => console.log("Server started on port 5000"));

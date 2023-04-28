@@ -13,6 +13,11 @@ const Layout = () => {
   useEffect(() => {
     checkLogin();
   }, []);
+
+  const logout = () => {
+    localStorage.clear()
+    navigate("/")
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -33,9 +38,9 @@ const Layout = () => {
           </button>
           <div className="navbar-collapse collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mb-lg-0 mb-2 me-auto"></ul>
-            <Link to="/login" className="btn btn-outline-danger">
+            <div  onClick={logout} className="btn btn-outline-danger">
               Çıkış Yap
-            </Link>
+            </div>
           </div>
         </div>
       </nav>

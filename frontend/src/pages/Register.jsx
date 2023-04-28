@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
 const Register = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -14,8 +16,17 @@ const Register = () => {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("avatar", avatar, avatar.name);
-    navigate("/");
-  };
+    
+  
+    axios.post("http://localhost:5000/api/register",formData)
+    .then(res => {
+     localStorage.setItem("token",JSON.stringify(res.data.token));
+     localStorage.setItem("user",JSON.stringify(res.data.user));
+      navigate("/")
+    })
+  }
+  
+
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="col-md-4">
@@ -40,7 +51,7 @@ const Register = () => {
                 <label htmlFor="email">Email</label>
                 <input
                   required
-                  email
+                  email="true"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
