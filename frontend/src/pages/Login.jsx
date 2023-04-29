@@ -1,15 +1,29 @@
 import React, { useState } from "react";
-import {  NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const login = (e) => {
     e.preventDefault();
-    navigate("/");
+    axios
+      .post("http://localhost:5000/api/login", {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        localStorage.setItem("token", JSON.stringify(res.data.token));
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        navigate("/");
+      })
+      .catch((error) => {
+     alert(error.response.data.message)
+      });
   };
   return (
-    <div className="flex items-center justify-center h-screen ">
+    <div className="flex h-screen items-center justify-center ">
       <div className="col-md-4">
         <div className="card">
           <div className="card-header">
@@ -44,12 +58,18 @@ const Login = () => {
                 />
               </div>
               <div className="form-group">
-                <button type="submit" className="w-full bg-blue-500 text-white mt-2 rounded-lg p-2">
+                <button
+                  type="submit"
+                  className="mt-2 w-full rounded-lg bg-blue-500 p-2 text-white"
+                >
                   Giriş Yap
                 </button>
               </div>
             </form>
-            <NavLink to={"/register"} className="flex justify-end pt-2"> Üye ol</NavLink>
+            <NavLink to={"/register"} className="flex justify-end pt-2">
+              {" "}
+              Üye ol
+            </NavLink>
           </div>
         </div>
       </div>

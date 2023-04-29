@@ -44,7 +44,7 @@ const options = {
   expiresIn: "1h",
 };
 
-  // Register
+// Register
 app.post("/api/register", upload.single("avatar"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -72,14 +72,32 @@ app.post("/api/register", upload.single("avatar"), async (req, res) => {
   }
 });
 
-
-  // Login
-  app.post("/api/login",async(req,res)=>{
-    const user = await user.findOne({
-      email:req.body.email,
-    })
-
-  })
-
+// Login
+app.post("/api/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({
+      email: email,
+      password: password,
+    });
+    if (user == null) {
+      res.status(403).json({
+        message: "Email or password is wrong",
+      });
+    }else{
+      const payload = {
+      };
+      const token = {
+        token: jwt.sign(payload, secretKey, options),
+      };
+      res.json({
+        token: token,
+        user: user,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.listen(5000, () => console.log("Server started on port 5000"));

@@ -15,14 +15,14 @@ const Register = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
+    formData.append("password", password);
     formData.append("avatar", avatar, avatar.name);
     
   
     axios.post("http://localhost:5000/api/register",formData)
     .then(res => {
-     localStorage.setItem("token",JSON.stringify(res.data.token));
-     localStorage.setItem("user",JSON.stringify(res.data.user));
-      navigate("/")
+
+      navigate("/login")
     })
   }
   

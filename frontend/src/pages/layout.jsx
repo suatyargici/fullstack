@@ -16,7 +16,7 @@ const Layout = () => {
 
   const logout = () => {
     localStorage.clear()
-    navigate("/")
+    navigate("/login")
   };
   return (
     <div>
@@ -36,12 +36,10 @@ const Layout = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="navbar-collapse collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mb-lg-0 mb-2 me-auto"></ul>
-            <div  onClick={logout} className="btn btn-outline-danger">
+          
+            <div  onClick={logout} className="btn text-black ">
               Çıkış Yap
             </div>
-          </div>
         </div>
       </nav>
       <Outlet />
