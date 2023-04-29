@@ -100,4 +100,35 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+
+const postSchema = new mongoose.Schema({
+  _id: String,
+  userId: String,
+  content: String,
+  createdDate:String
+})
+
+const Post = mongoose.model("Post",postSchema)
+
+app.post("/api/post",async (req,res)=>{
+ 
+  try {
+    const {userId,content} = req.body
+    const post = new Post({
+      _id:uuidv4(),
+      userId,
+      content,
+      createdDate:Date.now()
+    })
+    const result = await post.save()
+    res.json({
+      result:result
+    })
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+)
+ 
+
 app.listen(5000, () => console.log("Server started on port 5000"));
