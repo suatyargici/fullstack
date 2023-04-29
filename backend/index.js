@@ -5,14 +5,17 @@ const multer = require("multer");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
+const path = require("path")
+
 app.use(express.json());
 app.use(cors());
 
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 const uri =
   "mongodb+srv://yargicisuat:Zgxgx3XkpHZSYGzb@sosyalmedya.hkzebvk.mongodb.net/socail-app";
 
-mongoose
-  .connect(uri, {
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -84,9 +87,8 @@ app.post("/api/login", async (req, res) => {
       res.status(403).json({
         message: "Email or password is wrong",
       });
-    }else{
-      const payload = {
-      };
+    } else {
+      const payload = {};
       const token = {
         token: jwt.sign(payload, secretKey, options),
       };
@@ -100,35 +102,50 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-
 const postSchema = new mongoose.Schema({
   _id: String,
   userId: String,
   content: String,
-  createdDate:String
-})
+  createdDate: String,
+});
 
-const Post = mongoose.model("Post",postSchema)
+const Post = mongoose.model("Post", postSchema);
 
-app.post("/api/post",async (req,res)=>{
- 
+app.post("/api/post", async (req, res) => {
   try {
-    const {userId,content} = req.body
+    const { userId, content } = req.body;
     const post = new Post({
-      _id:uuidv4(),
+      _id: uuidv4(),
       userId,
       content,
-      createdDate:Date.now()
-    })
-    const result = await post.save()
+      createdDate:new Date().toLocaleString('tr-TR'),
+    });
+    const result = await post.save();
     res.json({
-      result:result
-    })
+      result: result,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
-)
- 
+});
+
+app.get("/api/post", async (req, res) => {
+  try {
+    const result = await Post.aggregate([{
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "users",
+      },
+    }]).sort({ createdDate: -1 });
+    res.json({
+      result: result,
+    });
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.listen(5000, () => console.log("Server started on port 5000"));
