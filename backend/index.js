@@ -6,6 +6,8 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const path = require("path")
+const User = require("./models/users")
+const Post = require("./models/posts")
 
 app.use(express.json());
 app.use(cors());
@@ -22,14 +24,7 @@ mongoose.connect(uri, {
   .then(() => console.log("DB connected"))
   .catch((err) => console.log(err.message));
 
-const userSchema = new mongoose.Schema({
-  _id: String,
-  name: String,
-  email: String,
-  password: String,
-  avatar: Object,
-});
-const User = mongoose.model("user", userSchema);
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -102,14 +97,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-const postSchema = new mongoose.Schema({
-  _id: String,
-  userId: String,
-  content: String,
-  createdDate: String,
-});
 
-const Post = mongoose.model("Post", postSchema);
 
 app.post("/api/post", async (req, res) => {
   try {
